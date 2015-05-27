@@ -52,10 +52,10 @@ def setarPosicaoInicial(limiteX, limiteY):
     posX = random.randint(1, limiteX)
     posY = random.randint(1, limiteY)
 
-def atacar():
+def atacar(danoExtra):
     global atkMin, atkMax, forca # invoca as variaveis globais
     isCritico = random.randint(1, 10-forca) # testa a chance de um ataque critico
-    ataque = random.randint(atkMin, atkMax) # gera o valor de um ataque
+    ataque = random.randint(atkMin, atkMax+danoExtra) # gera o valor de um ataque
     if(isCritico != 1): # se o ataque NÃO for critico
         return ataque
     else: # se for crítico
@@ -113,11 +113,14 @@ def caminhar(direcao, limite):
         else:
             print("Impossível caminhar oeste!")
 
-def verStatus():
+def verStatus(aumentoAtk):
     global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, exp, expNext, level, pocoes, possuiChave
     print(nome)
     print("HP: " + str(HP) + "/" + str(maxHP) + " | Level: " + str(level))
-    print("Ataque: " + str(atkMin) + "(min) / " + str(atkMax) + "(max)")
+    if(aumentoAtk > 0):
+        print("Ataque: " + str(atkMin) + "(min) / " + str(atkMax) + "(max) + " + str(aumentoAtk))
+    else:
+        print("Ataque: " + str(atkMin) + "(min) / " + str(atkMax) + "(max)")
     print("Experiência: " + str(exp) + "/" + str(expNext))
     print("Força: " + str(forca))
     print("Velocidade: " + str(velocidade))

@@ -76,7 +76,7 @@ def batalha():
         comando = input("> ")
         
         if(comando == "atk"): # atacar
-            inimigo.receberDano(heroi.atacar())
+            inimigo.receberDano(heroi.atacar(item.retornaAumentoAtk()))
             if(inimigo.HP > 0):
                 heroi.receberDano(inimigo.atacar())
                 
@@ -180,7 +180,7 @@ while(menu != "sair" and heroi.HP > 0):
             print("Você não está perto do portão!")
 
     elif(menu == "status"):
-        heroi.verStatus()
+        heroi.verStatus(item.retornaAumentoAtk())
         item.lerInventario()
 
     elif(menu == "beber poção" or menu == "beber pocao" or menu == "beberpocao" or menu == "beberpoção" or menu == "bbp"):
@@ -226,6 +226,10 @@ while(menu != "sair" and heroi.HP > 0):
     elif(menu == "dano"):
         valor = int(input("Digite um valor para receber de dano:\n> "))
         heroi.HP = heroi.HP - valor
+
+    elif(menu == "getEspada"):
+        item.setarItem(item.retornaPrimeiroSlotVazio(), 4, 1)
+        print("Você conseguiu uma espada!")
 
     elif(menu == "batalha"):
         batalha()

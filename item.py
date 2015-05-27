@@ -93,6 +93,12 @@ def retornaPrimeiroSlotVazio():
             valorRetorno = x
             break
     return valorRetorno
+
+def retornaAumentoAtk():
+    valorRetorno = 0
+    for x in range(0,4):
+        valorRetorno+= inventario[x].aumentoAtk
+    return valorRetorno
     
 def lerInventario():
     for x in range(0,4):
