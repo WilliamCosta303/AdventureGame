@@ -23,6 +23,7 @@ atkMin = 10
 atkMax = 13
 velocidade = 5 # aumenta as chances de esquivar de um ataque
 forca = 3 # aumenta as chances de criticos
+gold = 0 # dinheiro
 exp = 0 # experiência
 expNext = 40 # experiência necessária para subir level
 level = 1 # level
@@ -46,6 +47,8 @@ chaveX = 0
 chaveY = 0
 portaoX = 0
 portaoY = 0
+NPCX = 0
+NPCY = 0
 
 def setarPosicaoInicial(limiteX, limiteY):
     global posX, posY
@@ -114,13 +117,14 @@ def caminhar(direcao, limite):
             print("Impossível caminhar oeste!")
 
 def verStatus(aumentoAtk):
-    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, exp, expNext, level, pocoes, possuiChave
+    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, gold, exp, expNext, level, pocoes, possuiChave
     print(nome)
     print("HP: " + str(HP) + "/" + str(maxHP) + " | Level: " + str(level))
     if(aumentoAtk > 0):
         print("Ataque: " + str(atkMin) + "(min) / " + str(atkMax) + "(max) + " + str(aumentoAtk))
     else:
         print("Ataque: " + str(atkMin) + "(min) / " + str(atkMax) + "(max)")
+    print("Dinheiro: " + str(gold) + "$")
     print("Experiência: " + str(exp) + "/" + str(expNext))
     print("Força: " + str(forca))
     print("Velocidade: " + str(velocidade))
@@ -146,13 +150,13 @@ def beberPocao(quantPoc, quantCura):
         print("Você não possui nenhuma poção!")
         return 0
 
-def salvarJogo(chaveX, chaveY, portaoX, portaoY, item1Tipo, item1Quant, item2Tipo, item2Quant, item3Tipo, item3Quant, item4Tipo, item4Quant):
-    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, exp, expNext, level, posX, posY
+def salvarJogo(chaveX, chaveY, portaoX, portaoY, NPCX, NPCY, item1Tipo, item1Quant, item2Tipo, item2Quant, item3Tipo, item3Quant, item4Tipo, item4Quant):
+    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, gold, exp, expNext, level, posX, posY
     
     file = open("saves/" + nome + '.adv','w') # abre o arquivo para salvar
 
     # Gera o texto a ser codificado
-    texto = str(HP) + "," + str(maxHP) + "," + str(armadura) + "," + str(atkMin) + "," + str(atkMax) + "," + str(velocidade) + "," + str(forca) + "," + str(exp) + "," + str(expNext) + "," + str(level) + "," + str(posX) + "," + str(posY) + "," + str(chaveX) + "," + str(chaveY) + "," + str(portaoX) + "," + str(portaoY) + "," + str(item1Tipo) + "," + str(item1Quant) + "," + str(item2Tipo) + "," + str(item2Quant) + "," + str(item3Tipo) + "," + str(item3Quant) + "," + str(item4Tipo) + "," + str(item4Quant)
+    texto = str(HP) + "," + str(maxHP) + "," + str(armadura) + "," + str(atkMin) + "," + str(atkMax) + "," + str(velocidade) + "," + str(forca) + "," + str(gold) + "," + str(exp) + "," + str(expNext) + "," + str(level) + "," + str(posX) + "," + str(posY) + "," + str(chaveX) + "," + str(chaveY) + "," + str(portaoX) + "," + str(portaoY) + "," + str(NPCX) + "," + str(NPCY) + "," + str(item1Tipo) + "," + str(item1Quant) + "," + str(item2Tipo) + "," + str(item2Quant) + "," + str(item3Tipo) + "," + str(item3Quant) + "," + str(item4Tipo) + "," + str(item4Quant)
     texto = base64.b64encode(texto.encode('ascii'))
     
     texto = texto.decode("utf-8")
@@ -164,7 +168,7 @@ def salvarJogo(chaveX, chaveY, portaoX, portaoY, item1Tipo, item1Quant, item2Tip
     print("Jogo salvo com sucesso!")
 
 def abrirJogo():
-    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, exp, expNext, level, pocoes, possuiChave, posX, posY, chaveX, chaveY, portaoX, portaoY, item1Tipo, item1Quant, item2Tipo, item2Quant, item3Tipo, item3Quant, item4Tipo, item4Quant
+    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, gold, exp, expNext, level, pocoes, possuiChave, posX, posY, chaveX, chaveY, portaoX, portaoY, NPCX, NPCY, item1Tipo, item1Quant, item2Tipo, item2Quant, item3Tipo, item3Quant, item4Tipo, item4Quant
     print("Tentando abrir jogo...")
     try:
         file = open("saves/" + nome + ".adv",'r') # abre o arquivo para leitura
@@ -174,7 +178,7 @@ def abrirJogo():
         texto = texto.split(',')
 
         contAbrir = 0
-        for x in range(0,24):
+        for x in range(0,26):
             if(contAbrir == 0):
                 HP = int(texto[x])
             elif(contAbrir == 1):
@@ -190,38 +194,44 @@ def abrirJogo():
             elif(contAbrir == 6):
                 forca = int(texto[x])
             elif(contAbrir == 7):
-                exp = int(texto[x])
+                gold = int(texto[x])
             elif(contAbrir == 8):
-                expNext = int(texto[x])
+                exp = int(texto[x])
             elif(contAbrir == 9):
-                level = int(texto[x])
+                expNext = int(texto[x])
             elif(contAbrir == 10):
-                posX = int(texto[x])
+                level = int(texto[x])
             elif(contAbrir == 11):
-                posY = int(texto[x])
+                posX = int(texto[x])
             elif(contAbrir == 12):
-                chaveX = int(texto[x])
+                posY = int(texto[x])
             elif(contAbrir == 13):
-                chaveY = int(texto[x])
+                chaveX = int(texto[x])
             elif(contAbrir == 14):
-                portaoX = int(texto[x])
+                chaveY = int(texto[x])
             elif(contAbrir == 15):
-                portaoY = int(texto[x])
+                portaoX = int(texto[x])
             elif(contAbrir == 16):
-                item1Tipo = int(texto[x])
+                portaoY = int(texto[x])
             elif(contAbrir == 17):
-                item1Quant = int(texto[x])
+                NPCX = int(texto[x])
             elif(contAbrir == 18):
-                item2Tipo = int(texto[x])
+                NPCY = int(texto[x])
             elif(contAbrir == 19):
-                item2Quant = int(texto[x])
+                item1Tipo = int(texto[x])
             elif(contAbrir == 20):
-                item3Tipo = int(texto[x])
+                item1Quant = int(texto[x])
             elif(contAbrir == 21):
-                item3Quant = int(texto[x])
+                item2Tipo = int(texto[x])
             elif(contAbrir == 22):
-                item4Tipo = int(texto[x])
+                item2Quant = int(texto[x])
             elif(contAbrir == 23):
+                item3Tipo = int(texto[x])
+            elif(contAbrir == 24):
+                item3Quant = int(texto[x])
+            elif(contAbrir == 25):
+                item4Tipo = int(texto[x])
+            elif(contAbrir == 26):
                 item4Quant = int(texto[x])
             else:
                 print("Dunno")

@@ -27,7 +27,7 @@ class SubItem():
 inventario = (SubItem(), SubItem(), SubItem(), SubItem())
 
 def setarItem(posicao, tipo, quant):
-    if(tipo == 1): # Poções do heroi
+    if(tipo == 1): # Poção
         inventario[posicao].itemID = tipo
         inventario[posicao].nome = "Poção"
         inventario[posicao].descricao = "Curam 25HP do herói"
@@ -77,6 +77,14 @@ def alterarQuantidadeItem(isConsumir, pos, quant):
         inventario[pos].quantidade = inventario[pos].quantidade - quant
     else: # Se não consumir o item
         inventario[pos].quantidade = inventario[pos].quantidade + quant
+
+def retornaPosicaoItem(idItem):
+    valorRetorno = -1
+    for x in range(0,4):
+        if(inventario[x].itemID == idItem):
+           valorRetorno = int(x)
+           break
+    return valorRetorno
 
 def possuiChave():
     valorRetorno = 0

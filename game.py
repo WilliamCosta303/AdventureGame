@@ -21,6 +21,7 @@ print ("Carregando o jogo...\n")
 import mundo
 mundo.sortearPosicaoChave()
 mundo.sortearPosicaoPortao()
+mundo.sortearPosicaoNPC()
 print ("Mundo carregado!")
 
 import item
@@ -50,11 +51,66 @@ print("\n---\n")
 
 def carregarJogo():
     heroi.abrirJogo()
-    mundo.abrirPosicoes(heroi.chaveX, heroi.chaveY, heroi.portaoX, heroi.portaoY)
+    mundo.abrirPosicoes(heroi.chaveX, heroi.chaveY, heroi.portaoX, heroi.portaoY, heroi.NPCX, heroi.NPCY)
     item.setarItem(0, heroi.item1Tipo, heroi.item1Quant)
     item.setarItem(1, heroi.item2Tipo, heroi.item2Quant)
     item.setarItem(2, heroi.item3Tipo, heroi.item3Quant)
     item.setarItem(3, heroi.item4Tipo, heroi.item4Quant)
+
+def compraLoja():
+    menuCompra = ""
+    menuCompra2 = ""
+    while(menuCompra != "0"):
+        menuCompra2 = ""
+        print("+-----------\n| Gaben Ewell\n+-----------\n| Bem-vindo a minha loja!\n| Você deseja:\n|  1 - comprar\n|  2 - vender\n|  0 - sair\n+-----------")
+        menuCompra = input("loja> ")
+        while(menuCompra == "1" and menuCompra2 != "0"):
+            print("+-----------\n| Gaben Ewell\n+-----------\n| O que deseja comprar?\n| 1 - Poção - 6$\n| 2 - Super poção - 11$\n| 3 - Espada - 32$\n| 0 - Sair\n+-----------\n")
+            menuCompra2 = input("comprar> ")
+            if(menuCompra2 == "1"):
+                if(heroi.gold >= 6):
+                    if(item.retornaPosicaoItem(1) != -1):
+                        print("+-----------\n| Gaben Ewell\n+-----------\n| Obrigado!\n| Aqui está sua poção.\n+-----------")
+                        item.alterarQuantidadeItem(0, item.retornaPosicaoItem(1), 1)
+                        heroi.gold = heroi.gold - 6
+                    else:
+                        if(item.retornaPrimeiroSlotVazio() != -1):
+                            print("+-----------\n| Gaben Ewell\n+-----------\n| Obrigado!\n| Aqui está sua poção.\n+-----------")
+                            item.setarItem(item.retornaPrimeiroSlotVazio(), 1, 1)
+                            heroi.gold = heroi.gold - 6
+                        else:
+                            print("+-----------\n| Gaben Ewell\n+-----------\n| Lamento!\n| Você não tem espaço no intenvário!\n+-----------")
+                else:
+                    print("+-----------\n| Gaben Ewell\n+-----------\n| Desculpe, você não tem dinheiro suficiente!\n+-----------")
+            elif(menuCompra2 == "2"):
+                if(heroi.gold >= 11):
+                    if(item.retornaPosicaoItem(2) != -1):
+                        print("+-----------\n| Gaben Ewell\n+-----------\n| Obrigado!\n| Aqui está sua super poção.\n+-----------")
+                        item.alterarQuantidadeItem(0, item.retornaPosicaoItem(2), 1)
+                        heroi.gold = heroi.gold - 11
+                    else:
+                        if(item.retornaPrimeiroSlotVazio() != -1):
+                            print("+-----------\n| Gaben Ewell\n+-----------\n| Obrigado!\n| Aqui está sua super poção.\n+-----------")
+                            item.setarItem(item.retornaPrimeiroSlotVazio(), 2, 1)
+                            heroi.gold = heroi.gold - 11
+                        else:
+                            print("+-----------\n| Gaben Ewell\n+-----------\n| Lamento!\n| Você não tem espaço no intenvário!\n+-----------")
+                else:
+                    print("+-----------\n| Gaben Ewell\n+-----------\n| Desculpe, você não tem dinheiro suficiente!\n+-----------")
+            elif(menuCompra2 == "3"):
+                if(heroi.gold >= 32):
+                    if(item.retornaPrimeiroSlotVazio() != -1):
+                        print("+-----------\n| Gaben Ewell\n+-----------\n| Obrigado!\n| Aqui está sua espada.\n+-----------")
+                        item.setarItem(item.retornaPrimeiroSlotVazio(), 4, 1)
+                        heroi.gold = heroi.gold - 32
+                    else:
+                        print("+-----------\n| Gaben Ewell\n+-----------\n| Lamento!\n| Você não tem espaço no intenvário!\n+-----------")
+                else:
+                    print("+-----------\n| Gaben Ewell\n+-----------\n| Desculpe, você não tem dinheiro suficiente!\n+-----------")
+        while(menuCompra == "2" and menuCompra2 != "0"):
+            print("+-----------\n| Gaben Ewell\n+-----------\n| Não estou comprando itens por\n| um tempo, desculpe.\n+-----------")
+            menuCompra2 = "0"
+            
 
 def imprimirHud(isBatalha):
     if(isBatalha == 0):
@@ -67,6 +123,30 @@ def imprimirHud(isBatalha):
         print(heroi.nome + " - HP: " + str(heroi.HP) + "/" + str(heroi.maxHP) + " VS " + inimigo.nome + " - HP: " + str(inimigo.HP) + "/" + str(inimigo.maxHP))
         print("atk - atacar | fug - fugir | bbp - beber poção\nO que fazer agora?")
         
+def getDadoPocao(qualDado, tipoPocao):
+    if(tipoPocao == 1): # poção normal
+        posPocao = item.retornaPosicaoItem(1)
+        if(posPocao != -1):
+            if(qualDado == 1): # retorna posição da poção
+                return posPocao
+            elif(qualDado == 2): # retorna a quantidade de poção
+                return item.inventario[posPocao].quantidade
+            else: # retorna o aumento de HP da poção
+                return item.inventario[posPocao].aumentoHP
+        else:
+            return 0
+    else: # Super poção
+        posPocao = item.retornaPosicaoItem(2)
+        if(posPocao != -1):
+            if(qualDado == 1): # retorna posição da poção
+                return posPocao
+            elif(qualDado == 2): # retorna a quantidade de poção
+                return item.inventario[posPocao].quantidade
+            else: # retorna o aumento de HP da poção
+                return item.inventario[posPocao].aumentoHP
+        else:
+            return 0
+            
 
 def batalha():
     inimigo.setarInimigo(heroi.level)
@@ -90,8 +170,8 @@ def batalha():
                 heroi.receberDano(inimigo.atacar())
                 
         elif(comando == "bbp"): # beber poção
-            if(heroi.beberPocao(item.inventario[0].quantidade, item.inventario[0].aumentoHP)):
-                item.alterarQuantidadeItem(1, 0, 1)
+            if(heroi.beberPocao(getDadoPocao(2, 1), getDadoPocao(3, 1))):
+                item.alterarQuantidadeItem(1, getDadoPocao(1, 1), 1)
                 heroi.receberDano(inimigo.atacar())
                 
         else:
@@ -99,8 +179,9 @@ def batalha():
             
     if(comando != "fug" and heroi.HP > 0):
         print("---\n" + heroi.nome + " derrotou o " + inimigo.nome + "!")
-        print("Você ganhou " + str(inimigo.retornarExpGanha()) + " de experiência!")
+        print("Você ganhou " + str(inimigo.retornarExpGanha()) + " de experiência e " + str(inimigo.retornarGoldGanho()) + " de ouro!")
         heroi.exp = heroi.exp + inimigo.retornarExpGanha()
+        heroi.gold = heroi.gold + inimigo.retornarGoldGanho()
         heroi.subirNivel()
         if(inimigo.chanceDroparPocao() == 1):
             item.alterarQuantidadeItem(0, 0, 1)
@@ -132,7 +213,7 @@ while(menu != "sair" and heroi.HP > 0):
     menu = input("> ")
 
     if(menu == "salvarJogo"):
-        heroi.salvarJogo(mundo.posChaveX, mundo.posChaveY, mundo.posPortaoX, mundo.posPortaoY, item.inventario[0].itemID, item.inventario[0].quantidade, item.inventario[1].itemID, item.inventario[1].quantidade, item.inventario[2].itemID, item.inventario[2].quantidade, item.inventario[3].itemID, item.inventario[3].quantidade)
+        heroi.salvarJogo(mundo.posChaveX, mundo.posChaveY, mundo.posPortaoX, mundo.posPortaoY, mundo.posNPCX, mundo.posNPCY, item.inventario[0].itemID, item.inventario[0].quantidade, item.inventario[1].itemID, item.inventario[1].quantidade, item.inventario[2].itemID, item.inventario[2].quantidade, item.inventario[3].itemID, item.inventario[3].quantidade)
 
     elif (menu == "abrirJogo"):
         carregarJogo()
@@ -161,6 +242,12 @@ while(menu != "sair" and heroi.HP > 0):
         if(chanceBatalha == 1):
             batalha()
 
+    elif(menu == "falar"):
+        if(heroi.posX == mundo.posNPCX and heroi.posY == mundo.posNPCY):
+            compraLoja()
+        else:
+            print("Você não está próximo de ninguem!")
+
     elif(menu == "pegar"):
         if(heroi.posX == mundo.posChaveX and heroi.posY == mundo.posChaveY):
             item.setarItem(item.retornaPrimeiroSlotVazio(), 3, 1)
@@ -184,8 +271,8 @@ while(menu != "sair" and heroi.HP > 0):
         item.lerInventario()
 
     elif(menu == "beber poção" or menu == "beber pocao" or menu == "beberpocao" or menu == "beberpoção" or menu == "bbp"):
-        if(heroi.beberPocao(item.inventario[0].quantidade, item.inventario[0].aumentoHP)):
-            item.alterarQuantidadeItem(1, 0, 1)
+        if(heroi.beberPocao(getDadoPocao(1, 1), getDadoPocao(2, 1))):
+            item.alterarQuantidadeItem(1, getDadoPocao(1, 1), 1)
 
     elif(menu == "sair"):
         print("Saindo...")
@@ -223,6 +310,10 @@ while(menu != "sair" and heroi.HP > 0):
         heroi.exp = heroi.exp + int(novoValor)
         heroi.subirNivel()
 
+    elif(menu == "adicionarGold"):
+        novoValor = input("Digite um valor para adicionar:\ndinheiro> ")
+        heroi.gold = heroi.gold + int(novoValor)
+
     elif(menu == "dano"):
         valor = int(input("Digite um valor para receber de dano:\n> "))
         heroi.HP = heroi.HP - valor
@@ -235,8 +326,7 @@ while(menu != "sair" and heroi.HP > 0):
         batalha()
         
     elif(menu == "diz ai seu bosta"):
-        print("Chave\nX: " + str(mundo.posChaveX) + " | Y: " + str(mundo.posChaveY))
-        print("Portão\nX: " + str(mundo.posPortaoX) + " | Y: " + str(mundo.posPortaoY))
+        mundo.imprimirPosicoes()
     #------------------------------------
     #       Fim dos comandos de teste
     #------------------------------------

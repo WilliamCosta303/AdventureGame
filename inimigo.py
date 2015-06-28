@@ -24,10 +24,12 @@ atkMax = 13
 velocidade = 5 # aumenta as chances de esquivar de um ataque
 forca = 3 # aumenta as chances de criticos
 expGanhaMin = 0 # mínimo de experiência que o jogador ganhará
-expGanhaMax = 0 # náximo de experiência que o jogador ganhará
+expGanhaMax = 0 # máximo de experiência que o jogador ganhará
+goldGanhoMin = 0 # mínimo de dinheiro que o jogador ganhará
+goldGanhoMax = 0 # máximo de dinheiro que o jogador ganhará
 
 def setarInimigo(nivelJogador):
-    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, expGanhaMin, expGanhaMax
+    global nome, HP, maxHP, armadura, atkMin, atkMax, velocidade, forca, expGanhaMin, expGanhaMax, goldGanhoMin, goldGanhoMax
     inimigo = random.randint(1, 3)
     if(nivelJogador < 5):
         if(inimigo == 1):
@@ -41,6 +43,8 @@ def setarInimigo(nivelJogador):
             forca = 1
             expGanhaMin = 5
             expGanhaMax = 8
+            goldGanhoMin = 3
+            goldGanhoMax = 5
         elif(inimigo == 2):
             nome = "Demon"
             HP = 40
@@ -52,6 +56,8 @@ def setarInimigo(nivelJogador):
             forca = 2
             expGanhaMin = 9
             expGanhaMax = 13
+            goldGanhoMin = 2
+            goldGanhoMax = 4
         elif(inimigo == 3):
             nome = "Troll"
             HP = 28
@@ -63,6 +69,8 @@ def setarInimigo(nivelJogador):
             forca = 2
             expGanhaMin = 9
             expGanhaMax = 12
+            goldGanhoMin = 2
+            goldGanhoMax = 5
     else: # Jogador nivel 5 ou mais
         if(inimigo == 1):
             nome = "Esqueleto com armadura"
@@ -75,6 +83,8 @@ def setarInimigo(nivelJogador):
             forca = 3
             expGanhaMin = 11
             expGanhaMax = 15
+            goldGanhoMin = 7
+            goldGanhoMax = 10
         elif(inimigo == 2):
             nome = "Devil"
             HP = 62
@@ -86,6 +96,8 @@ def setarInimigo(nivelJogador):
             forca = 3
             expGanhaMin = 13
             expGanhaMax = 17
+            goldGanhoMin = 9
+            goldGanhoMax = 15
         elif(inimigo == 3):
             nome = "Orc"
             HP = 80
@@ -97,6 +109,8 @@ def setarInimigo(nivelJogador):
             forca = 5
             expGanhaMin = 22
             expGanhaMax = 25
+            goldGanhoMin = 11
+            goldGanhoMax = 16
 
 def atacar():
     global atkMin, atkMax, forca
@@ -119,6 +133,10 @@ def receberDano(quantidadeDano):
 def retornarExpGanha():
     global expGanhaMin, expGanhaMax
     return random.randint(expGanhaMin, expGanhaMax)
+
+def retornarGoldGanho():
+    global goldGanhoMin, goldGanhoMax
+    return random.randint(goldGanhoMin, goldGanhoMax)
 
 def chanceDroparPocao():
     return random.randint(1, 5)

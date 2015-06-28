@@ -27,23 +27,33 @@ posChaveY = 0
 posPortaoX = 0
 posPortaoY = 0
 
+# Posição da loja
+posNPCX = 0
+posNPCY = 0
+
 def salvarPosicoes(objeto, tipo):
-    global posChaveX, posChaveY, posPortaoX, posPortaoY
+    global posChaveX, posChaveY, posPortaoX, posPortaoY, posNPCX, posNPCY
     if(objeto == 1 and tipo == 1):
         return posChaveX
     elif(objeto == 1 and tipo == 2):
         return posChaveY
     elif(objeto == 2 and tipo == 1):
         return posPortaoX
-    else:
+    elif(objeto == 2 and tipo == 2):
         return posPortaoY
+    elif(objeto == 3 and tipo == 1):
+        return posNPCX
+    else:
+        return posNPCY
 
-def abrirPosicoes(chaveX, chaveY, portaoX, portaoY):
-    global posChaveX, posChaveY, posPortaoX, posPortaoY
+def abrirPosicoes(chaveX, chaveY, portaoX, portaoY, NPCX, NPCY):
+    global posChaveX, posChaveY, posPortaoX, posPortaoY, posNPCX, posNPCY
     posChaveX = chaveX
     posChaveY = chaveY
     posPortaoX = portaoX
     posPortaoY = portaoY
+    posNPCX = NPCX
+    posNPCY = NPCY
 
 def sortearPosicaoChave():
     global posChaveX, posChaveY
@@ -74,10 +84,21 @@ def sortearPosicaoPortao():
         while(posPortaoY == posChaveY):
             posPortaoY = random.randint(1, limiteY)
 
+def sortearPosicaoNPC():
+    global posNPCX, posNPCY, limiteX, limiteY, posPortaoX, posPortaoY
+    posNPCX = random.randint(1, limiteX)
+    while(posNPCX == posPortaoX):
+        posNPCX = random.randint(1, limiteX)
+    posNPCY = random.randint(1, limiteY)
+    while(posNPCY == posPortaoY):
+        posNPCY = random.randint(1, limiteY)
+
 def lerPosicaoAtual(X, Y):
-    global posChaveX, posChaveY, posPortaoX, posPortaoY
+    global posChaveX, posChaveY, posPortaoX, posPortaoY, posNPCX, posNPCY
     if(X == posPortaoX and Y == posPortaoY):
         mensagem = "portão"
+    elif(X == posNPCX and Y == posNPCY):
+        mensagem = "loja"
     else:
         mensagem = "terra"
     if(X == posChaveX and Y == posChaveY):
@@ -89,6 +110,7 @@ def moverChave():
     posChaveX = limiteX+1
         
 def imprimirPosicoes():
-    global posChaveX, posChaveY, posPortaoX, posPortaoY
+    global posChaveX, posChaveY, posPortaoX, posPortaoY, posNPCX, posNPCY
     print("Chave: X" + str(posChaveX) + " / Y" + str(posChaveY))
     print("Portão: X" + str(posPortaoX) + " / Y" + str(posPortaoY))
+    print("Loja: X" + str(posNPCX) + " / Y" + str(posNPCY))
