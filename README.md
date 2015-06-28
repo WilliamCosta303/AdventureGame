@@ -21,5 +21,7 @@ Você precisa encontrar a chave e o portão para poder fugir.
 
 **status** - exibe estado atual do herói;
 
+**falar** - fala com o vendedor quando próximo da loja;
+
 ## Requisitos
 Python 3.4+
