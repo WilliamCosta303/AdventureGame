@@ -1,3 +1,8 @@
+# AVISO
+Esse projeto está sendo hospedado agora no [GitLab](https://gitlab.com/williamcosta/AdventureGame)!  
+**TODA** e qualquer nova atualização aparecerá somente por lá.
+
+---
 # AdventureGame
 Um jogo de aventura em linha de comando feito em Python;
 
